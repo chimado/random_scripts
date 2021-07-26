@@ -4,11 +4,12 @@
 #define getName(var) #var
 
 void printRows();
+void changeRows();
+bool verifyChange();
 
-static int row[4][7];
+static int oprow, oprange[2], row[4][7];
 
 int main(){
-    int oprow, oprange[2];
 
     while (true)
     {
@@ -22,8 +23,35 @@ int main(){
         printf("Select the ending position of the range you want to change: ");
         scanf("%d", &oprange[1]);
 
-        switch (oprow)
-        {
+        if (verifyChange()){
+            changeRows();
+            printRows();
+        }
+    }
+
+    printf("\nFinal output:\n");
+    printRows();
+
+    return 0;
+}
+bool verifyChange(){
+    if (oprange[0] > oprange[1]){
+        printf("Error: Invalid range\n");
+        return false;
+    }
+
+    for (int i = oprange[0]; i < oprange[1] - oprange[0] + 1; i++){
+        if (row[oprow - 1][i] == 1){
+            printf("Error: Not all cells in range are empty\n");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void changeRows(){
+    switch (oprow){
         case 1:
             row[0][0] = 1;
             break;
@@ -55,23 +83,23 @@ int main(){
         default:
             printf("Please enter a valid input");
             break;
-        }
     }
-
-    printRows();
-
-    return 0;
 }
 
 void printRows(){
+    printf("\n");
+
     for (int z = 0; z < 4; z++){
         for (int x = 0; x < 6 - z * 2; x++){
             printf(" ");
         }
+
         for (int i = 0; i < z * 2 + 1; i++){
             printf("%d ", row[z][i]);
         }
 
         printf("\n");
     }
+
+    printf("\n");
 }
