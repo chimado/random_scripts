@@ -13,6 +13,7 @@
 void printRows();
 void changeRows();
 bool verifyChange();
+bool areaFull();
 
 /*
     oprow is short for operation row, it's the row being changed
@@ -24,38 +25,66 @@ bool verifyChange();
 static int oprow, oprange[2], row[4][7];
 
 int main(){
+    int player = 1;
 
     // loop for the game to run constantly
-    while (true)
+    while (!areaFull())
     {
-        // input collection
-        printf("Select the row you want to change: ");
-        scanf("%d", &oprow);
+        // updates the current player
+        player++;
+        player = player % 2;
+
+        // collects input until a valid one is found
+        do
+        {
+            // input collection
+            printf("Select the row you want to change: ");
+            scanf("%d", &oprow);
+            printf("Select the starting position of the range you want to change: ");
+            scanf("%d", &oprange[0]);
+            printf("Select the ending position of the range you want to change: ");
+            scanf("%d", &oprange[1]);
+
+            // debug option to end the game
+            if (oprow == -1){ 
+                break;
+            }
+
+            if (!verifyChange()){
+                // prints the play area each time for the user to see
+                printRows();
+            }
+
+        } while (!verifyChange());
 
         // debug option to end the game
         if (oprow == -1){ 
             break;
         }
 
-        printf("Select the starting position of the range you want to change: ");
-        scanf("%d", &oprange[0]);
-        printf("Select the ending position of the range you want to change: ");
-        scanf("%d", &oprange[1]);
-
-        // verifies the change the user wants to make and if it's valid it changes the arrays accordingly
-        if (verifyChange()){
-            changeRows();
-
-            // prints the play area each time for the user to see
-            printRows();
-        }
+        // after a change is confirmed it changes the playing area accordingly
+        changeRows();
+        printRows();
     }
 
     // outputs the final board, probably won't be in the final version (ironically)
-    printf("\nFinal output:\n");
+    printf("\nPlayer %d won:\n", player + 1);
     printRows();
 
     return 0;
+}
+
+// checks if the playing area is full
+bool areaFull(){
+    for (int z = 0; z < 4; z++){
+        for (int i = 0; i < z % 2 + 1; i++){
+            if (row[z][i] == 0){
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 /*
@@ -64,6 +93,7 @@ int main(){
     a valid range's first value is smaller than it's second one
     if the range is invalid it returns false, if it is valid it returns true
 */
+
 bool verifyChange(){
 
     // checks if the range is valid and if not prints out a corresponding error message
@@ -73,7 +103,7 @@ bool verifyChange(){
     }
 
     // checks if all cells in the desired range are empty
-    for (int i = oprange[0]; i < oprange[1] - oprange[0] + 1; i++){
+    for (int i = oprange[0] - 1; i < oprange[1] - oprange[0] + 1; i++){
         if (row[oprow - 1][i] == 1){
             printf("Error: Not all cells in range are empty\n");
             return false;
@@ -91,6 +121,7 @@ void changeRows(){
         needs to be a switch for range verification
         to make sure it won't try to change cells that don't exist or shouldn't be changed
     */
+
     switch (oprow){
         case 1:
             row[0][0] = 1;
