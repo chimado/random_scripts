@@ -25,7 +25,22 @@ bool areaFull();
 static int oprow, oprange[2], row[4][7];
 
 int main(){
-    int player = 1;
+    int player = 1, ncoop = 1;
+    bool coop;
+
+    // checks if the player wants to play coop and ajusts the coop variable accordingly
+    printf("Do you want to play coop or vs a bot? (default is bot, 0 for bot 1 for coop): ");
+    scanf("%d", &ncoop);
+
+    if (ncoop == 1){
+        coop = true;
+        printf("Coop enabled\n");
+    }
+
+    else{
+        coop = false;
+        printf("Bot enabled\n");
+    }
 
     // loop for the game to run constantly
     while (!areaFull())
@@ -34,28 +49,35 @@ int main(){
         player++;
         player = player % 2;
 
-        // collects input until a valid one is found
-        do
-        {
-            // input collection
-            printf("Select the row you want to change: ");
-            scanf("%d", &oprow);
-            printf("Select the starting position of the range you want to change: ");
-            scanf("%d", &oprange[0]);
-            printf("Select the ending position of the range you want to change: ");
-            scanf("%d", &oprange[1]);
+        if (coop == true || player == 0){
+            // collects input until a valid one is found
+            do
+            {
+                // input collection
+                printf("Select the row you want to change: ");
+                scanf("%d", &oprow);
+                printf("Select the starting position of the range you want to change: ");
+                scanf("%d", &oprange[0]);
+                printf("Select the ending position of the range you want to change: ");
+                scanf("%d", &oprange[1]);
 
-            // debug option to end the game
-            if (oprow == -1){ 
-                break;
-            }
+                // debug option to end the game
+                if (oprow == -1){ 
+                    break;
+                }
 
-            if (!verifyChange()){
-                // prints the play area each time for the user to see
-                printRows();
-            }
+                if (!verifyChange()){
+                    // prints the play area each time for the user to see
+                    printRows();
+                }
 
-        } while (!verifyChange());
+            } while (!verifyChange());
+        }
+
+        // bot instructions
+        //else{
+
+        //}
 
         // debug option to end the game
         if (oprow == -1){ 
@@ -73,6 +95,15 @@ int main(){
 
     return 0;
 }
+
+/*
+    Player 2 won:
+
+          1 
+        1 1 0 
+      1 1 1 1 1 
+    1 1 1 1 1 1 1 
+*/
 
 // checks if the playing area is full
 bool areaFull(){
