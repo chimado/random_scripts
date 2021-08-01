@@ -3,13 +3,14 @@
 #include <stdbool.h>
 #include <math.h>
 
-int binToDec();
+long binToDec();
 
 int main(){
-    int bin, dec;
+    long bin;
+    int dec;
 
     printf("Enter a binary number: ");
-    scanf("%d", &bin);
+    scanf("%ld", &bin);
 
     dec = binToDec(bin, 0);
 
@@ -21,7 +22,7 @@ int main(){
     return 0;
 }
 
-int binToDec(int bin, int count){
+long binToDec(long bin, int count){
     if (bin > 0){
         return pow(2 * (bin % 10), count) + binToDec(bin / 10, count + 1);
     }
