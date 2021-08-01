@@ -4,7 +4,7 @@
 
 const int maxBits = 256;
 
-void main(){
+int main(){
     bool numStart = false;
     int dec;
     int bin[maxBits];
@@ -38,5 +38,5 @@ void main(){
     printf("%d\n", bin[0]);
     numStart = false;
 
-    main();
+    return 0;
 }
