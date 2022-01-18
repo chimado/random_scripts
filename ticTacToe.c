@@ -8,12 +8,10 @@ int play();
 int winner();
 void printBoard();
 
-int main(){
+int main(void){
     int win, board[len];
 
-    win = play(board, 1);
-    
-    return 0;
+    win = play(board, 1);    
 }
 
 int play(int board[len], int player){
